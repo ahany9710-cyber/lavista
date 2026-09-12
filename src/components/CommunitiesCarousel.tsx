@@ -27,29 +27,40 @@ const CommunitiesCarousel = () => {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 md:mb-8">
           <div>
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-              Project Zones
+              الماستر بلان
             </h2>
-            <p className="text-gray-600">اكتشف مناطق مشروع IL Monte Galala - Marina Towers</p>
+            <p className="text-gray-600">16% بناء، حديقة 25 فدان، كلوب هاوس، نادي، وتجاري على المحور</p>
           </div>
           <motion.button
             onClick={scrollToForm}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
-            className="px-6 py-3 bg-tatweer-orange text-white rounded-xl font-semibold hover:bg-orange-600 transition-colors shadow-md whitespace-nowrap"
+            className="px-6 py-3 bg-lavista-sand text-lavista-ink rounded-xl font-semibold hover:bg-lavista-bronze transition-colors shadow-md whitespace-nowrap"
           >
-            استكشف المناطق ←
+            سجّل EOI
           </motion.button>
         </div>
+
+        <figure className="mb-8 md:mb-10 overflow-hidden rounded-2xl bg-lavista-cream border border-black/5">
+          <img
+            src="./images/masterplan.webp"
+            alt="ماستر بلان El Patio Townside من بروشور المطور"
+            className="w-full h-auto"
+          />
+          <figcaption className="px-4 py-2 text-xs text-gray-500">
+            من بروشور المطور. Townside لسه في مرحلة اللونش، وده مش تصوير للموقع بعد التنفيذ.
+          </figcaption>
+        </figure>
 
         <div className="relative max-w-7xl mx-auto">
           {/* Navigation arrows - matching ListingsCarousel style */}
           <button
             onClick={prev}
-            className="absolute lg:right-2 right-0 top-1/2 -translate-y-1/2 z-20 p-3 sm:p-4 md:p-5 shadow-2xl bg-white rounded-full border-2 border-gray-200 hover:border-tatweer-orange active:border-tatweer-orange transition-all min-w-[48px] min-h-[48px] flex items-center justify-center"
+            className="absolute lg:right-2 right-0 top-1/2 -translate-y-1/2 z-20 p-3 sm:p-4 md:p-5 shadow-2xl bg-white rounded-full border-2 border-gray-200 hover:border-lavista-sand active:border-lavista-sand transition-all min-w-[48px] min-h-[48px] flex items-center justify-center"
             aria-label="السابق"
           >
             <svg
-              className="w-5 h-5 sm:w-6 sm:h-6 text-tatweer-orange"
+              className="w-5 h-5 sm:w-6 sm:h-6 text-lavista-ink"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -64,11 +75,11 @@ const CommunitiesCarousel = () => {
           </button>
           <button
             onClick={next}
-            className="absolute lg:left-2 left-0 top-1/2 -translate-y-1/2 z-20 p-3 sm:p-4 md:p-5 shadow-2xl bg-white rounded-full border-2 border-gray-200 hover:border-tatweer-orange active:border-tatweer-orange transition-all min-w-[48px] min-h-[48px] flex items-center justify-center"
+            className="absolute lg:left-2 left-0 top-1/2 -translate-y-1/2 z-20 p-3 sm:p-4 md:p-5 shadow-2xl bg-white rounded-full border-2 border-gray-200 hover:border-lavista-sand active:border-lavista-sand transition-all min-w-[48px] min-h-[48px] flex items-center justify-center"
             aria-label="التالي"
           >
             <svg
-              className="w-5 h-5 sm:w-6 sm:h-6 text-tatweer-orange"
+              className="w-5 h-5 sm:w-6 sm:h-6 text-lavista-ink"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -112,11 +123,7 @@ const CommunitiesCarousel = () => {
                           {currentCommunity.tags.map((tag) => (
                             <span
                               key={tag}
-                              className={
-                                tag.includes('2030') || tag.includes('Tatweer') || tag === 'IL Monte Galala'
-                                  ? 'text-xs sm:text-sm font-semibold px-3 py-1.5 rounded-full bg-orange-100 text-tatweer-orange uppercase tracking-wide'
-                                  : 'text-xs sm:text-sm text-gray-500 uppercase tracking-wide'
-                              }
+                              className="text-xs sm:text-sm font-semibold px-3 py-1.5 rounded-full bg-lavista-cream text-lavista-ink"
                             >
                               {tag}
                             </span>
@@ -137,10 +144,11 @@ const CommunitiesCarousel = () => {
                       {/* CTA Button */}
                       <button
                         onClick={scrollToForm}
-                        className="w-full py-4 px-6 bg-tatweer-orange text-white rounded-xl font-semibold text-lg hover:bg-orange-600 transition-colors shadow-lg"
+                        className="w-full py-4 px-6 bg-lavista-sand text-lavista-ink rounded-xl font-semibold text-lg hover:bg-lavista-bronze transition-colors shadow-lg"
                       >
-                        احصل على مزيد من التفاصيل
+                        عاين من أرض الواقع
                       </button>
+                      <p className="mt-2 text-xs text-gray-500">الطلب بيتسجل مع Flair Agency لترتيب المعاينة. لسنا المطور.</p>
                     </div>
 
                     {/* Image column - order-1 on mobile (above text), order-2 on md+ (left side) */}
@@ -166,7 +174,7 @@ const CommunitiesCarousel = () => {
                   onClick={() => goToIndex(i)}
                   className={`rounded-full transition-all min-w-[44px] min-h-[44px] flex items-center justify-center ${
                     i === currentIndex
-                      ? 'bg-tatweer-orange w-12 h-3'
+                      ? 'bg-lavista-sand w-12 h-3'
                       : 'bg-gray-300 w-3 h-3 hover:bg-gray-400'
                   }`}
                   aria-label={`الانتقال إلى المنطقة ${i + 1}`}

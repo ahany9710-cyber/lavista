@@ -10,15 +10,18 @@ export const config = {
 
   // رقم الواتساب (بدون + أو مسافات لاستخدامه في wa.me)
   // WhatsApp number (without + or spaces for wa.me links)
-  whatsappNumber: '201274230856',
+  whatsappNumber: '201013772255',
 
   // رقم الموبايل للمكالمات (مع + للمكالمات)
   // Phone number for calls (with + for tel: links)
-  phoneNumber: '+201274230856',
+  phoneNumber: '+201013772255',
 
   // تنسيق رقم الموبايل للعرض (اختياري - لو فاضي يستخدم phoneNumber)
   // Phone display format (optional - uses phoneNumber if empty)
-  phoneDisplay: '+20 127 423 0856',
+  phoneDisplay: '0101 377 2255',
+
+  // رسالة الواتساب لطلب البروشور / تسجيل EOI
+  whatsappPrefill: 'مهتم بتسجيل EOI في El Patio Townside ومحتاج البروشور',
 
   // ——— Google Ads (تهيئة جوجل أدز) ———
   // معرف Google Tag العالمي (مثل AW-XXXXXXXXX) - يُحمّل في كل الصفحات
@@ -33,9 +36,7 @@ export const config = {
   // Conversion label from Google Ads - used on thank-you page only
   conversion_label: '19hmCPvcm_kbELGfoMpC',
 
-  // ——— الفيديوهات (اختياري - للاستضافة الخارجية) ———
-  // لو فاضي: يستخدم الملفات من public (./hero-video.mp4، ./location.mp4)
-  // لو مليان: يستخدم الرابط المباشر (مثلاً من YouTube أو CDN)
+  // لم يعد يُستخدم — الهيرو صورة ثابتة والموقع خريطة جوجل
   heroVideoUrl: '',
   heroPosterUrl: '',
   mapVideoUrl: '',

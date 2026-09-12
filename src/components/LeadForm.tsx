@@ -1,333 +1,200 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { config } from '../config';
 
 const FORMSPREE_ENDPOINT = `https://formspree.io/f/${config.formspreeFormId}`;
 
-const PROJECT_OPTIONS = [
-  { id: 'studios', name: 'Studios' },
-  { id: 'one-bedroom', name: 'One Bedroom' },
-  { id: 'two-bedrooms', name: 'Two Bedrooms' },
-  { id: 'executive', name: 'Executive Units' },
-  { id: 'penthouse', name: 'Penthouse' },
-];
+const UNITS = ['Side House', 'Icon', 'Prime', 'Grand', 'Signature', 'لسه بختار'];
 
-interface FormData {
-  fullName: string;
-  phoneNumber: string;
-  confirmPhoneNumber: string;
-  contactMethod: 'whatsapp' | 'call' | '';
-  interestedProject: string;
+function normalizePhone(raw: string) {
+  let digits = raw.replace(/[^\d]/g, '');
+  if (digits.startsWith('0020')) digits = digits.slice(4);
+  else if (digits.startsWith('20') && digits.length > 10) digits = digits.slice(2);
+  if (digits.length === 10 && !digits.startsWith('0')) digits = `0${digits}`;
+  return digits.slice(0, 11);
 }
 
-interface FormErrors {
-  fullName?: string;
-  phoneNumber?: string;
-  confirmPhoneNumber?: string;
-  contactMethod?: string;
-  interestedProject?: string;
+function isEgyptianMobile(phone: string) {
+  return /^01[0125]\d{8}$/.test(phone);
 }
 
 const LeadForm = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState<FormData>({
-    fullName: '',
-    phoneNumber: '',
-    confirmPhoneNumber: '',
-    contactMethod: '',
-    interestedProject: '',
-  });
-  const [errors, setErrors] = useState<FormErrors>({});
+  const phoneRef = useRef<HTMLInputElement>(null);
+  const [phone, setPhone] = useState('');
+  const [unit, setUnit] = useState('لسه بختار');
+  const [contactMethod, setContactMethod] = useState<'whatsapp' | 'call'>('whatsapp');
+  const [error, setError] = useState('');
+  const [submitError, setSubmitError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const validateField = (name: keyof FormData, value: string): string | undefined => {
-    switch (name) {
-      case 'fullName':
-        return undefined;
-      case 'phoneNumber':
-        if (!value.trim()) return 'رقم التواصل مطلوب';
-        if (!/^[0-9+\s-]+$/.test(value)) return 'يرجى إدخال رقم هاتف صحيح مع كود الدولة';
-        if (value.replace(/\D/g, '').length < 10) return 'يجب أن يكون رقم الهاتف على الأقل 10 أرقام مع كود الدولة';
-        return undefined;
-      case 'confirmPhoneNumber':
-        return undefined;
-      case 'contactMethod':
-        return undefined;
-      case 'interestedProject':
-        return undefined;
-      default:
-        return undefined;
-    }
-  };
-
-  const handleChange = (name: keyof FormData, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      const error = validateField(name, value);
-      setErrors((prev) => ({ ...prev, [name]: error }));
-    }
-  };
-
-  const handleBlur = (name: keyof FormData) => {
-    const error = validateField(name, formData[name]);
-    setErrors((prev) => {
-      const newErrors = { ...prev };
-      if (error) {
-        newErrors[name] = error;
-      } else {
-        delete newErrors[name];
-      }
-      return newErrors;
-    });
-  };
-
-  const validateForm = (): boolean => {
-    const newErrors: FormErrors = {};
-    (Object.keys(formData) as Array<keyof FormData>).forEach((key) => {
-      const error = validateField(key, formData[key]);
-      if (error) newErrors[key] = error;
-    });
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const getThankYouPath = (): string => {
+  const getThankYouPath = () => {
     const base = (typeof import.meta.env.BASE_URL === 'string' ? import.meta.env.BASE_URL : '').replace(/\.$/, '') || '/';
     return base === '/' ? '/thank-you' : `${base.replace(/\/$/, '')}/thank-you`;
   };
 
+  const whatsappFallback = () => {
+    const text = `مرحباً، أنا مهتم بـ ${unit} في El Patio Townside${phone ? ` — رقمي +20${phone.slice(1)}` : ''}. ممكن أعرف الأسعار وخطة السداد؟`;
+    return `https://wa.me/${config.whatsappNumber}?text=${encodeURIComponent(text)}`;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    setSubmitError('');
+    if (!isEgyptianMobile(phone)) {
+      setError('رقم الموبايل غير صحيح — يرجى إدخال رقم مصري صحيح (01...)');
+      phoneRef.current?.focus();
+      return;
+    }
     setIsSubmitting(true);
-    const errorMessage = 'حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى أو الاتصال بنا على الواتساب أو الهاتف.';
     try {
-      const formDataToSend = new FormData();
-      formDataToSend.append('full_name', formData.fullName);
-      formDataToSend.append('phone', formData.phoneNumber);
-      formDataToSend.append('additional_phone', formData.confirmPhoneNumber);
-      formDataToSend.append('contact_method', formData.contactMethod);
-      formDataToSend.append('interested_project', formData.interestedProject);
-
+      const body = new FormData();
+      body.append('phone', `+20${phone.slice(1)}`);
+      body.append('interested_unit', unit);
+      body.append('contact_method', contactMethod);
+      body.append('project', 'El Patio Townside');
       const res = await fetch(FORMSPREE_ENDPOINT, {
         method: 'POST',
-        body: formDataToSend,
+        body,
+        headers: { Accept: 'application/json' },
         redirect: 'manual',
       });
-      const success =
-        res.ok ||
-        res.status === 301 ||
-        res.status === 302 ||
-        res.status === 303 ||
-        res.type === 'opaqueredirect';
+      const success = res.ok || res.status === 301 || res.status === 302 || res.status === 303 || res.type === 'opaqueredirect';
       if (success) {
         navigate(getThankYouPath());
         return;
       }
       setIsSubmitting(false);
-      alert(errorMessage);
+      setSubmitError('حدث خطأ أثناء الإرسال. جرب تاني أو كلمنا على واتساب مباشرة.');
     } catch {
       setIsSubmitting(false);
-      alert(errorMessage);
+      setSubmitError('حدث خطأ أثناء الإرسال. جرب تاني أو كلمنا على واتساب مباشرة.');
     }
   };
 
-  const isFormValid = () => {
-    // Check if phone number is filled
-    if (formData.phoneNumber.trim() === '') return false;
-    
-    // Check if there are any actual error messages (not undefined)
-    const hasErrors = Object.values(errors).some(error => error !== undefined && error !== '');
-    return !hasErrors;
-  };
-
   return (
-    <section id="lead-form" className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
-      <div className="max-w-2xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="bg-white rounded-2xl shadow-xl p-6 md:p-10"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2 text-center">
-            احصل على الأسعار وخطط الدفع والبروشور
+    <section id="lead-form" className="w-full bg-lavista-cream px-4 py-6 md:py-8">
+      <div className="mx-auto max-w-md">
+        <div className="bg-white rounded-2xl border border-[#E4DCD0] px-4 py-5">
+          <h2 className="text-[22px] font-bold text-lavista-ink leading-snug mb-2">
+            استلم الأسعار وخطة السداد
           </h2>
-          <p className="text-gray-600 text-center mb-8">
-            املأ النموذج أدناه وسنرسل لك جميع التفاصيل
+          <p className="text-[14.5px] leading-relaxed text-[#5a6158] mb-5">
+            رقمك فقط. فريق Flair Agency يبعتلك الأسعار والبروشور، وينسّق معاينة الموقع لو طلبت. لسنا المطور.
           </p>
 
-          <motion.form
-            action={FORMSPREE_ENDPOINT}
-            method="POST"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            onSubmit={handleSubmit}
-            className="space-y-6"
-          >
-                <div>
-                  <label
-                    htmlFor="fullName"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
-                    الاسم الكامل
-                  </label>
-                  <input
-                    type="text"
-                    id="fullName"
-                    name="full_name"
-                    value={formData.fullName}
-                    onChange={(e) => handleChange('fullName', e.target.value)}
-                    onBlur={() => handleBlur('fullName')}
-                    className={`w-full px-4 py-3 rounded-xl border-2 transition-colors ${
-                      errors.fullName
-                        ? 'border-red-500 focus:border-red-500'
-                        : 'border-gray-300 focus:border-tatweer-orange'
-                    } focus:outline-none focus:ring-2 focus:ring-tatweer-orange focus:ring-offset-2`}
-                    placeholder="أدخل اسمك الكامل"
-                  />
-                  {errors.fullName && (
-                    <p className="mt-1 text-sm text-red-500">{errors.fullName}</p>
-                  )}
-                </div>
+          <form onSubmit={handleSubmit} noValidate>
+            <label htmlFor="phone" className="block text-sm font-semibold text-lavista-ink mb-2">
+              رقم الموبايل
+            </label>
+            <div
+              className="flex items-center gap-2 rounded-[13px] bg-white px-3 mb-1.5"
+              style={{ border: `1.5px solid ${error ? '#8A2E1F' : '#161616'}` }}
+            >
+              <span className="text-[15px] text-[#5a6158] font-mono">+20</span>
+              <span className="w-px h-[26px] bg-[#E4DCD0]" />
+              <input
+                ref={phoneRef}
+                id="phone"
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                value={phone}
+                onChange={(e) => {
+                  setPhone(normalizePhone(e.target.value));
+                  if (error) setError('');
+                }}
+                onPaste={(e) => {
+                  e.preventDefault();
+                  setPhone(normalizePhone(e.clipboardData.getData('text')));
+                  if (error) setError('');
+                }}
+                placeholder="010 5555 0570"
+                className="flex-1 min-h-[52px] bg-transparent outline-none text-[17px] text-lavista-ink font-mono"
+              />
+            </div>
+            {error ? (
+              <p className="text-[13px] text-[#8A2E1F] mb-4">{error}</p>
+            ) : (
+              <div className="mb-4" />
+            )}
 
-                <div>
-                  <label
-                    htmlFor="phoneNumber"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+            <p className="block text-sm font-semibold text-lavista-ink mb-2">الوحدة المهتم بها</p>
+            <div className="flex flex-wrap gap-2 mb-4">
+              {UNITS.map((item) => {
+                const selected = unit === item;
+                return (
+                  <button
+                    key={item}
+                    type="button"
+                    onClick={() => setUnit(item)}
+                    aria-pressed={selected}
+                    className={`rounded-full px-[15px] py-[11px] text-sm ${
+                      selected ? 'bg-lavista-ink text-white font-semibold' : 'bg-lavista-cream border border-[#DDD8CA]'
+                    }`}
                   >
-                    رقم التواصل (واتساب) <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="tel"
-                    id="phoneNumber"
-                    name="phone"
-                    value={formData.phoneNumber}
-                    onChange={(e) => handleChange('phoneNumber', e.target.value)}
-                    onBlur={() => handleBlur('phoneNumber')}
-                    className={`w-full px-4 py-3 rounded-xl border-2 transition-colors ${
-                      errors.phoneNumber
-                        ? 'border-red-500 focus:border-red-500'
-                        : 'border-gray-300 focus:border-tatweer-orange'
-                    } focus:outline-none focus:ring-2 focus:ring-tatweer-orange focus:ring-offset-2`}
-                    placeholder="+20 123 456 7890 (مع كود الدولة)"
-                  />
-                  {errors.phoneNumber && (
-                    <p className="mt-1 text-sm text-red-500">{errors.phoneNumber}</p>
-                  )}
-                </div>
+                    {item}
+                  </button>
+                );
+              })}
+            </div>
 
-                <div>
-                  <label
-                    htmlFor="confirmPhoneNumber"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+            <p className="block text-sm font-semibold text-lavista-ink mb-2">تحب نتواصل إزاي؟</p>
+            <div className="grid grid-cols-2 gap-2 mb-5">
+              {([
+                { id: 'whatsapp' as const, label: 'واتساب' },
+                { id: 'call' as const, label: 'مكالمة' },
+              ]).map((item) => {
+                const selected = contactMethod === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => setContactMethod(item.id)}
+                    aria-pressed={selected}
+                    className={`min-h-[50px] rounded-[13px] text-[15px] ${
+                      selected
+                        ? 'bg-lavista-sand text-lavista-ink font-bold'
+                        : 'bg-white text-lavista-ink font-semibold border-[1.5px] border-[#DDD8CA]'
+                    }`}
                   >
-                    رقم إضافي للتواصل (اختياري)
-                  </label>
-                  <input
-                    type="tel"
-                    id="confirmPhoneNumber"
-                    name="additional_phone"
-                    value={formData.confirmPhoneNumber}
-                    onChange={(e) => handleChange('confirmPhoneNumber', e.target.value)}
-                    onBlur={() => handleBlur('confirmPhoneNumber')}
-                    className={`w-full px-4 py-3 rounded-xl border-2 transition-colors ${
-                      errors.confirmPhoneNumber
-                        ? 'border-red-500 focus:border-red-500'
-                        : 'border-gray-300 focus:border-tatweer-orange'
-                    } focus:outline-none focus:ring-2 focus:ring-tatweer-orange focus:ring-offset-2`}
-                    placeholder="أدخل رقم إضافي إن وجد"
-                  />
-                  {errors.confirmPhoneNumber && (
-                    <p className="mt-1 text-sm text-red-500">{errors.confirmPhoneNumber}</p>
-                  )}
-                </div>
+                    {item.label}
+                  </button>
+                );
+              })}
+            </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    طريقة الاتصال المفضلة
-                  </label>
-                  <div className="flex gap-4">
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        name="contact_method"
-                        value="whatsapp"
-                        checked={formData.contactMethod === 'whatsapp'}
-                        onChange={(e) => handleChange('contactMethod', e.target.value)}
-                        className="w-4 h-4 text-tatweer-orange focus:ring-tatweer-orange"
-                      />
-                      <span className="ml-2 text-gray-700">واتساب</span>
-                    </label>
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        name="contact_method"
-                        value="call"
-                        checked={formData.contactMethod === 'call'}
-                        onChange={(e) => handleChange('contactMethod', e.target.value)}
-                        className="w-4 h-4 text-tatweer-orange focus:ring-tatweer-orange"
-                      />
-                      <span className="ml-2 text-gray-700">مكالمة</span>
-                    </label>
-                  </div>
-                  {errors.contactMethod && (
-                    <p className="mt-1 text-sm text-red-500">{errors.contactMethod}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="interestedProject"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
-                    الوحدة المهتم بها
-                  </label>
-                  <select
-                    id="interestedProject"
-                    name="interested_project"
-                    value={formData.interestedProject}
-                    onChange={(e) => handleChange('interestedProject', e.target.value)}
-                    onBlur={() => handleBlur('interestedProject')}
-                    className={`w-full px-4 py-3 rounded-xl border-2 transition-colors ${
-                      errors.interestedProject
-                        ? 'border-red-500 focus:border-red-500'
-                        : 'border-gray-300 focus:border-tatweer-orange'
-                    } focus:outline-none focus:ring-2 focus:ring-tatweer-orange focus:ring-offset-2`}
-                  >
-                    <option value="">اختر الوحدة المهتم بها</option>
-                    {PROJECT_OPTIONS.map((project) => (
-                      <option key={project.id} value={project.id}>
-                        {project.name}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.interestedProject && (
-                    <p className="mt-1 text-sm text-red-500">{errors.interestedProject}</p>
-                  )}
-                </div>
-
-                <motion.button
-                  type="submit"
-                  disabled={isSubmitting}
-                  whileHover={{ scale: isFormValid() && !isSubmitting ? 1.02 : 1 }}
-                  whileTap={{ scale: isFormValid() && !isSubmitting ? 0.98 : 1 }}
-                  className={`w-full px-6 py-4 rounded-xl font-semibold text-white transition-all duration-200 shadow-lg ${
-                    isFormValid() && !isSubmitting
-                      ? 'bg-tatweer-orange hover:bg-orange-600 cursor-pointer'
-                      : 'bg-gray-400 cursor-not-allowed'
-                  }`}
+            {submitError && (
+              <div className="rounded-xl mb-4 px-3.5 py-3 border border-[#8A2E1F] bg-[rgba(138,46,31,0.08)]">
+                <p className="text-[13.5px] text-[#8A2E1F] mb-2">{submitError}</p>
+                <a
+                  href={whatsappFallback()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center w-full min-h-[44px] bg-lavista-ink text-white font-semibold rounded-lg text-sm"
                 >
-                  {isSubmitting ? 'جاري الإرسال...' : 'إرسال والحصول على البروشور'}
-                </motion.button>
-          </motion.form>
-        </motion.div>
+                  تواصل معنا على واتساب بدلاً من ذلك
+                </a>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full min-h-[56px] rounded-[14px] bg-lavista-ink text-white font-bold text-[17px] disabled:opacity-80"
+            >
+              {isSubmitting ? 'جاري الإرسال...' : 'ابعت الأسعار والبروشور'}
+            </button>
+            <p className="text-center mt-3 text-[13px] leading-relaxed text-[#6b7269]">
+              بالإرسال بتوافق إن Flair Agency تتواصل معاك خلال ساعات العمل بخصوص الاستفسار ده. مش بنبيع بياناتك.{' '}
+              <Link to="/privacy" className="underline">سياسة الخصوصية</Link>
+            </p>
+
+          </form>
+        </div>
       </div>
     </section>
   );
 };
 
 export default LeadForm;
-

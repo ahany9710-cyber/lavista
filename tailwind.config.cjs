@@ -8,12 +8,16 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ['Cairo', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
       },
       colors: {
-        tatweer: {
-          orange: '#E85D04',
-          'orange-light': '#FF6B00',
-          navy: '#0f172a',
+        lavista: {
+          ink: '#161616',
+          sand: '#BDA588',
+          'sand-deep': '#7A5C3A',
+          bronze: '#BC986B',
+          navy: '#00163A',
+          cream: '#F5F1EA',
         },
       },
     },

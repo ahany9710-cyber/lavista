@@ -8,31 +8,35 @@ export interface Community {
 
 export const communities: Community[] = [
   {
-    id: 'marina-zone',
-    name: 'Marina Zone',
-    tags: ['IL Monte Galala', 'البحر الأحمر', 'Al Ain Al Sokhna'],
-    description: 'منطقة مارينا فاخرة مع إطلالات مباشرة على البحر الأحمر. وحدات سكنية راقية مصممة لتوفير أسلوب حياة بحري استثنائي مع مرافق عالمية المستوى.',
-    image: './images/communities/mountain-view-1.1.webp?v=2',
+    id: 'waterside',
+    name: 'Waterside Parcel',
+    tags: ['البارسل الأولى', '400 فيلا فقط', '6 مسطحات مائية'],
+    description:
+      'أول بارسل في اللونش. مجتمع فيلات على الماء، بعدد محدود يحافظ على الهدوء والخصوصية — 400 فيلا فقط، من غير أبراج ومن غير شقق.',
+    image: './images/communities/waterside.webp',
   },
   {
-    id: 'residential-zone',
-    name: 'Residential Zone',
-    tags: ['4942 فدان', 'استلام 2030', 'Tatweer Misr'],
-    description: 'مجتمع سكني متكامل على مساحة 4942 فدان. تصميم عصري يجمع بين الخصوصية والراحة مع مناظر طبيعية خلابة في العين السخنة.',
-    image: './images/communities/hyde-park.webp?v=2',
+    id: 'clubhouse',
+    name: 'الكلوب هاوس',
+    tags: ['5 أفدنة', 'قلب الكمبوند'],
+    description:
+      'كلوب هاوس على 5 أفدنة في قلب المشروع. مساحة اجتماعية يومية للعيلة، مش مجرد مبنى خدمات على أطراف الماستر بلان.',
+    image: './images/communities/clubhouse.webp',
   },
   {
-    id: 'amenities-zone',
-    name: 'Amenities Zone',
-    tags: ['مرافق فاخرة', 'المنطقة الترفيهية'],
-    description: 'منطقة ترفيهية متكاملة تشمل المسابح والحدائق ومراكز اللياقة البدنية والمناطق الترفيهية لجميع أفراد العائلة.',
-    image: './images/communities/crista.webp?v=2',
+    id: 'sports',
+    name: 'النادي الرياضي',
+    tags: ['نادي رياضي', '16% نسبة بناء'],
+    description:
+      'نادي رياضي مخصص، ونسبة بناء سكني 16% حسب بروشور المطور. الباقي حديقة مفتوحة ولاندسكيب ومرافق.',
+    image: './images/communities/sports.webp',
   },
   {
-    id: 'beach-zone',
-    name: 'Beach Zone',
-    tags: ['شاطئ خاص', 'البحر الأحمر'],
-    description: 'شاطئ خاص بطول ساحلي مميز على البحر الأحمر. استمتع بحياة شاطئية راقية في قلب IL Monte Galala - Marina Towers.',
-    image: './images/communities/aliva.webp?v=2',
+    id: 'living',
+    name: '3 تجارب · 7 بارسلز',
+    tags: ['فيلات فقط', 'مسجد', '40 فدان تجاري'],
+    description:
+      'سكن فيلات، مسجد وخدمات، وأوفيس بارك. والمنطقة التجارية 40 فدان على واجهة محور جمال عبد الناصر.',
+    image: './images/communities/living.webp',
   },
 ];

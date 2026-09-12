@@ -3,6 +3,8 @@ export const config: {
   whatsappNumber: string;
   phoneNumber: string;
   phoneDisplay: string;
+  /** Prefilled WhatsApp message for brochure / EOI requests */
+  whatsappPrefill: string;
   /** Google Ads Global Tag ID (e.g. AW-XXXXXXXXX) - loaded on all pages */
   gtag_id: string;
   /** Optional conversion ID from Google Ads (for reference) */

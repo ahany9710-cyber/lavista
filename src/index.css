@@ -12,11 +12,11 @@
   }
 
   body {
-    @apply bg-white text-gray-900 antialiased;
+    @apply bg-white text-lavista-ink antialiased;
     font-family: 'Cairo', system-ui, -apple-system, sans-serif;
   }
 
-  * {
-    @apply focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2;
+  *:focus-visible {
+    @apply outline-none ring-2 ring-lavista-sand ring-offset-2;
   }
 }

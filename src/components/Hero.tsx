@@ -1,102 +1,62 @@
 import { motion } from 'framer-motion';
-import { config } from '../config';
 
 const Hero = () => {
-  const heroVideoSrc = config.heroVideoUrl?.trim() || './hero-video.mp4';
-  const heroPosterSrc = config.heroPosterUrl?.trim() || './video-poster.jpg';
+  const scrollToVillas = () => {
+    document.getElementById('villas')?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   const scrollToForm = () => {
-    const formSection = document.getElementById('lead-form');
-    if (formSection) {
-      formSection.scrollIntoView({ behavior: 'smooth' });
-    }
+    document.getElementById('lead-form')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
     <section id="project-highlights" className="w-full">
-      {/* Full-width video hero section */}
-      <div className="relative w-full h-[70vh] md:h-[80vh] lg:h-[90vh] overflow-hidden">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
+      <div className="relative w-full h-[64vh] md:h-[70vh] lg:h-[74vh] overflow-hidden bg-lavista-ink">
+        <img
+          src="./images/gallery/evening.webp"
+          alt="فيلات El Patio المُسلَّمة — La Vista Developments"
           className="absolute inset-0 w-full h-full object-cover"
-          poster={heroPosterSrc}
-          src={heroVideoSrc}
-        >
-          {/* Fallback for browsers that don't support video */}
-          <div className="absolute inset-0 bg-gradient-to-br from-tatweer-orange via-orange-600 to-tatweer-navy" />
-        </video>
-        
-        {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-black/40" />
-        
-        {/* Hero text overlay */}
-        <div className="absolute inset-0 flex items-center justify-center">
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/20" />
+
+        <div className="absolute inset-x-0 bottom-0 px-4 sm:px-8 pb-8 md:pb-12">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-center px-4"
+            transition={{ duration: 0.7 }}
+            className="max-w-3xl"
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 tracking-tight">
-              IL Monte Galala
+            <p className="inline-block mb-3 px-3 py-1 rounded-full bg-white text-lavista-ink text-xs sm:text-sm font-semibold tracking-wide">
+              Launching Soon — Waterside Parcel
+            </p>
+            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl text-white leading-none mb-3 [text-shadow:0_2px_18px_rgba(0,0,0,0.45)]">
+              El Patio Townside
             </h1>
-            <p className="text-xl md:text-2xl text-white/90 mb-6 font-medium">
-              Marina Towers
+            <p className="text-lg md:text-2xl text-white mb-2 [text-shadow:0_1px_10px_rgba(0,0,0,0.5)]">
+              فيلات فقط · على محور جمال عبد الناصر
             </p>
-            <p className="text-base md:text-lg text-white/80 mb-2">
-              عيش الرفاهية على البحر الأحمر
+            <p className="text-sm md:text-base text-white/90 mb-6 max-w-xl [text-shadow:0_1px_8px_rgba(0,0,0,0.55)]">
+              390 فدان، 3 دقائق من الجامعة الأمريكية. أول لونش: 400 فيلا في بارسل Waterside.
             </p>
-            <p className="text-sm md:text-base text-white/75 mb-8 max-w-2xl mx-auto">
-              IL Monte Galala Marina Towers, Tatweer Misr invites world-class operators to join in shaping Egypt's first Red Sea skyline.
-            </p>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center"
-            >
-              <motion.button
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
                 onClick={scrollToForm}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-tatweer-orange text-white rounded-2xl hover:bg-orange-600 transition-all duration-200 font-semibold shadow-xl text-lg"
+                className="px-7 py-3.5 bg-lavista-sand text-lavista-ink rounded-xl hover:bg-lavista-bronze transition-colors font-semibold"
               >
-                استكشف الوحدات
-              </motion.button>
-            </motion.div>
+                سجّل EOI
+              </button>
+              <button
+                onClick={scrollToVillas}
+                className="px-7 py-3.5 text-white rounded-xl border border-white/70 hover:bg-white/10 transition-colors font-semibold"
+              >
+                شوف الفيلات
+              </button>
+            </div>
+            <p className="mt-5 text-sm text-white max-w-xl [text-shadow:0_1px_8px_rgba(0,0,0,0.7)]">
+              تسويق Flair Agency · وسيط عقاري · لسنا الموقع الرسمي لـ La Vista Developments
+            </p>
           </motion.div>
         </div>
-
-        {/* Scroll down indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1.5 }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-        >
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="text-white"
-          >
-            <svg
-              className="w-6 h-6 mx-auto"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 14l-7 7m0 0l-7-7m7 7V3"
-              />
-            </svg>
-          </motion.div>
-        </motion.div>
       </div>
     </section>
   );

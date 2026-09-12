@@ -23,7 +23,7 @@ const FloatingActionBar = () => {
               href={`tel:${config.phoneNumber}`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex flex-col items-center justify-center px-3 py-3 bg-tatweer-orange text-white rounded-xl hover:bg-orange-600 transition-all duration-200 shadow-lg"
+              className="flex flex-col items-center justify-center px-3 py-3 bg-lavista-sand text-lavista-ink rounded-xl hover:bg-lavista-bronze transition-all duration-200 shadow-lg"
             >
               <svg
                 className="w-5 h-5 mb-1"
@@ -63,7 +63,7 @@ const FloatingActionBar = () => {
               onClick={scrollToForm}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex flex-col items-center justify-center px-3 py-3 bg-tatweer-navy text-white rounded-xl hover:bg-slate-800 transition-all duration-200 shadow-lg"
+              className="flex flex-col items-center justify-center px-3 py-3 bg-lavista-ink text-white rounded-xl hover:bg-lavista-navy transition-all duration-200 shadow-lg"
             >
               <svg
                 className="w-5 h-5 mb-1"
@@ -78,7 +78,7 @@ const FloatingActionBar = () => {
                   d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                 />
               </svg>
-              <span className="text-xs font-semibold">البروشور</span>
+              <span className="text-xs font-semibold">EOI</span>
             </motion.button>
           </div>
         </div>

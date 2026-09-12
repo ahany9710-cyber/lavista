@@ -1,75 +1,68 @@
 export interface Listing {
   id: string;
   name: string;
+  type: string;
   area: string;
-  tagline: string;
-  downpayment: string;
-  installment: string;
-  delivery: string;
-  finishing: string;
+  land?: string;
+  specs: string;
+  eoi: string;
   priceRange: string;
-  image?: string;
+  image: string;
 }
 
 export const listings: Listing[] = [
   {
-    id: '1',
-    name: 'Studios',
-    area: 'From 60 sqm',
-    image: './images/listings/listing-1.png?v=2',
-    tagline: 'IL Monte Galala - Marina Towers | Al Ain Al Sokhna, Red Sea',
-    downpayment: '-',
-    installment: 'Up to 10 years installments',
-    delivery: 'Completion 2030',
-    finishing: 'Full finishing',
-    priceRange: '8,000,000 EGP',
+    id: 'side-house',
+    name: 'Side House',
+    type: 'توين هاوس',
+    area: '225 م²',
+    specs: '3 غرف نوم + ريسبشن',
+    eoi: '300,000 ج.م',
+    priceRange: '31,190,000 ج.م',
+    image: './images/gallery/evening.webp',
   },
   {
-    id: '2',
-    name: 'One Bedroom',
-    area: 'From 95 sqm',
-    image: './images/listings/listing-2.png?v=2',
-    tagline: 'IL Monte Galala - Marina Towers | Al Ain Al Sokhna, Red Sea',
-    downpayment: '-',
-    installment: 'Up to 10 years installments',
-    delivery: 'Completion 2030',
-    finishing: 'Full finishing',
-    priceRange: '13,200,000 EGP',
+    id: 'icon',
+    name: 'Icon Villa',
+    type: 'ستاندالون',
+    area: '225 م²',
+    land: '262 م²',
+    specs: '3 غرف نوم + ريسبشن',
+    eoi: '400,000 ج.م',
+    priceRange: '35,800,000 ج.م',
+    image: './images/listings/icon.webp',
   },
   {
-    id: '3',
-    name: 'Two Bedrooms',
-    area: 'From 120 sqm',
-    image: './images/listings/listing-3.png?v=2',
-    tagline: 'IL Monte Galala - Marina Towers | Al Ain Al Sokhna, Red Sea',
-    downpayment: '-',
-    installment: 'Up to 10 years installments',
-    delivery: 'Completion 2030',
-    finishing: 'Full finishing',
-    priceRange: '15,100,000 EGP',
+    id: 'prime',
+    name: 'Prime Villa',
+    type: 'ستاندالون',
+    area: '265 م²',
+    land: '299 م²',
+    specs: '4 غرف نوم + ريسبشن + غرفة خادمة',
+    eoi: '400,000 ج.م',
+    priceRange: '40,190,000 ج.م',
+    image: './images/listings/prime.webp',
   },
   {
-    id: '4',
-    name: 'Executive Units',
-    area: 'One Bedroom (120 sqm)',
-    image: './images/listings/listing-4.png?v=2',
-    tagline: 'IL Monte Galala - Marina Towers | Al Ain Al Sokhna, Red Sea',
-    downpayment: '-',
-    installment: 'Up to 10 years installments',
-    delivery: 'Completion 2030',
-    finishing: 'Full finishing',
-    priceRange: '18,800,000 EGP',
+    id: 'grand',
+    name: 'Grand Villa',
+    type: 'ستاندالون',
+    area: '310 م²',
+    land: '349 م²',
+    specs: '4 ماستر بدريسنج + غرفة خادمة + ريسبشن',
+    eoi: '400,000 ج.م',
+    priceRange: '49,430,000 ج.م',
+    image: './images/listings/grand.webp',
   },
   {
-    id: '5',
-    name: 'Penthouse',
-    area: '415 sqm',
-    image: './images/listings/listing-5.png?v=2',
-    tagline: 'IL Monte Galala - Marina Towers | Al Ain Al Sokhna, Red Sea',
-    downpayment: '-',
-    installment: 'Up to 10 years installments',
-    delivery: 'Completion 2030',
-    finishing: 'Full finishing',
-    priceRange: '75,700,000 EGP',
+    id: 'signature',
+    name: 'Signature Villa',
+    type: 'ستاندالون',
+    area: '411 م²',
+    land: '508 م²',
+    specs: 'أوفيس + 4 ماستر + ريسبشن',
+    eoi: '400,000 ج.م',
+    priceRange: '70,430,000 ج.م',
+    image: './images/listings/signature.webp',
   },
 ];
