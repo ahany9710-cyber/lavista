@@ -6,7 +6,7 @@
 export const config = {
   // معرف فورم Formspree (الفورم يبعت على الإيميل المسجل في formspree.io)
   // Formspree form ID (form submissions go to the email registered at formspree.io)
-  formspreeFormId: 'meelayjw',
+  formspreeFormId: 'xwlkdkoe',
 
   // رقم الواتساب (بدون + أو مسافات لاستخدامه في wa.me)
   // WhatsApp number (without + or spaces for wa.me links)
